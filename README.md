@@ -25,6 +25,7 @@
 
 
 #### Структура разработанной инфраструктуры ####
+![image](https://github.com/skorospelovas/Otus_DevOps_final_project/assets/106163438/6fce16cc-ccb1-41ca-9cbf-5858a95076f9)
 
 
 
@@ -102,6 +103,11 @@
   terraform init
   terraform apply
 
+Так как мы обходимся без резервирования статических ip адресов, после запуска выполнения необхоидмо в Yandex Cloud, посмотреть ip адрес созданной A записи gitlab.project.space и
+на локальной машине в файл /etc/hosts добавить запись вида:
+>
+  <ip адрес> gitlab.project.space
+
 Terraform произведет установку:
 * VM для  MongoDB на базе созданного образа без публичного IP
 * VM для  Gitlab 
@@ -159,7 +165,7 @@ Ansible создаст:
 >
     kubectl get svc -n ingress-nginx
 
-Через веб интерфейс YC создать А DNS записи поддоменов app, staging, prometheus,  grafana, zipkin , kibana  доменф project.space на внешний IP LoadBalancer.
+Через веб интерфейс YC создать А DNS записи поддоменов app, staging, prometheus,  grafana, zipkin , kibana  домен project.space на внешний IP LoadBalancer.
 
 Установить RabbitMQ
 >

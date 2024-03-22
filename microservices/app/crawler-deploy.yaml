@@ -1,0 +1,42 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crawler
+  labels:
+    app: search_engine
+    component: crawler
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: search_engine
+      component: crawler
+  template:
+    metadata:
+      name: crawler
+      labels:
+        app: search_engine
+        component: crawler
+    spec:
+      containers:
+      - image: skorospelovas/crawler:latest
+        name: crawler
+        env:
+          - name: MONGO
+            value: "srv-mongodb"
+          - name: MONGO_PORT
+            value: "27017"
+          - name: RMQ_HOST
+            value: "rabbitmq-headless"
+          - name: RMQ_QUEUE
+            value: "crawler"
+          - name: RMQ_USERNAME
+            value: "user"
+          - name: RMQ_PASSWORD
+            value: 'crawler_pass'
+          - name: CHECK_INTERVAL
+            value: "10"
+          - name: EXCLUDE_URLS
+            value: '.*github.com'
+

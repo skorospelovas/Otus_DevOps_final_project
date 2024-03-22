@@ -1,0 +1,6 @@
+{
+    "disk_size": "5",
+    "source_image_id": "...",
+    "key_file":"../key.json",
+    "folder_id":"..."
+}

@@ -1,0 +1,6 @@
+{
+    "disk_size": "10",
+    "source_image_id": "ubuntu-2204-lts",
+    "key_file":"/home/alex/otus/key.json",
+    "folder_id":"b1garuf6j8husgt8i4on"
+}

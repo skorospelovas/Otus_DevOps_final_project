@@ -1,0 +1,27 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ui
+  labels:
+    app: search_engine
+    component: ui
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: search_engine
+      component: ui
+  template:
+    metadata:
+      name: ui
+      labels:
+        app: search_engine
+        component: ui
+    spec:
+      containers:
+      - image: skorospelovas/ui:latest
+        name: ui
+        env:
+          - name: MONGO
+            value: srv-mongodb

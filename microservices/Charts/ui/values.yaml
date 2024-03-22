@@ -1,0 +1,11 @@
+---
+service:
+  internalPort: 8000
+  externalPort: 8000
+
+image:
+  repository: skorospelovas/ui
+  tag: latest
+
+#databaseHost:
+#Domain_Name

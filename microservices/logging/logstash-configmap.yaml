@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: logstash-config
+data:
+  logstash.conf: |-
+      input {
+        beats {
+            port => 5044
+            host => "0.0.0.0"
+        }
+      }
+  
+      filter {
+        mutate {
+        gsub => ["message", '"', '']
+        rename =>  { "[json][service]" => "[servicename]" }
+        convert => {
+          "servicename" => "string"
+          }
+        }
+        if [index_prefix] == "filebeat" {
+
+          if [message] =~ /^\{.*\}$/ {
+            json {
+              source => "message"
+              skip_on_invalid_json => true
+            }
+          }
+          
+        }
+
+        mutate {
+          add_field => { "[@metadata][index_prefix]" => "%{index_prefix}-%{+YYYY.MM.dd}" }
+          remove_field => ["index_prefix"]
+        }
+
+      }
+  
+      output {
+        elasticsearch {
+            hosts => "elasticsearch:9200"
+            template_overwrite => false
+            manage_template => false
+            index => "%{[@metadata][index_prefix]}"
+            sniffing => false
+        }
+      }

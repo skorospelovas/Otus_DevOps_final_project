@@ -1,0 +1,55 @@
+---
+- name: Gitlab
+  become: true
+  hosts: gitlab
+  tasks:
+
+    - name: Wait for APT Lock
+      shell:  while PID=$(pidof -s apt-get); do tail --pid=$PID -f /dev/null; done
+
+    - name: Install dependencies
+      apt:
+        name: 
+          - curl
+          - openssh-server
+          - ca-certificates
+          - tzdata
+          - perl
+          - gnupg
+        state: present
+      tags: install
+
+    - name: Check if GitLab is already installed.
+      stat: path=/usr/bin/gitlab-ctl
+      register: gitlab_file
+
+    - name: Download GitLab repository installation script.
+      get_url:
+        url: https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh
+        dest: /tmp/gitlab_install_repository.sh
+        validate_certs: true
+      when: not gitlab_file.stat.exists
+
+    - name: Install GitLab repository.
+      command: bash /tmp/gitlab_install_repository.sh
+      register: output
+      when: not gitlab_file.stat.exists
+
+    - name: Install GitLab package.
+      apt:
+        name: gitlab-ce
+      environment: 
+        EXTERNAL_URL: "http://gitlab.project.space" 
+      when: not gitlab_file.stat.exists
+
+    - name: Extract init root password
+      command: "grep 'Password:' /etc/gitlab/initial_root_password"
+      register: init_root_pass
+
+    - name: Get pass
+      set_fact:
+        root_pass: "{{ init_root_pass.stdout }}"
+
+    - name: Print root init password
+      ansible.builtin.debug:
+        msg: Root {{ root_pass }}

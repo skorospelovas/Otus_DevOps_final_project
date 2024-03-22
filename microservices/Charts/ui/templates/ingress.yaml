@@ -1,0 +1,14 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}
+spec:
+  rules:
+  - host: '{{ .Values.URL | default (printf "staging.yar2.space" ) }}'
+    http:
+      paths:
+      - path: "/"
+        backend:
+          serviceName: {{ .Release.Name }}-{{ .Chart.Name }}
+          servicePort: {{ .Values.service.externalPort }}

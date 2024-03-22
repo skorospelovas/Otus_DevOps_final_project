@@ -1,0 +1,39 @@
+---
+- hosts: localhost
+  tasks:
+  - name: Create a namespace logging
+    kubernetes.core.k8s:
+      state: present
+      definition:
+        apiVersion: v1
+        kind: Namespace
+        metadata:
+          name: logging
+  
+  - name: Create a namespace monitoring
+    kubernetes.core.k8s:
+      state: present
+      definition:
+        apiVersion: v1
+        kind: Namespace
+        metadata:
+          name: monitoring
+
+  - name: Create a namespace staging
+    kubernetes.core.k8s:
+      state: present
+      definition:
+        apiVersion: v1
+        kind: Namespace
+        metadata:
+          name: staging
+
+  - name: Create a namespace production
+    kubernetes.core.k8s:
+      state: present
+      definition:
+        apiVersion: v1
+        kind: Namespace
+        metadata:
+          name: production
+

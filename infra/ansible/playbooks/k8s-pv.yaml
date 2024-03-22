@@ -1,0 +1,70 @@
+---
+- hosts: localhost
+  tasks:
+  - include_vars: tf_ansible_vars_file.yaml  
+  - name: Create a PersistentVolume data-es-cluster-0
+    community.kubernetes.k8s:
+      state: present
+      definition:
+        apiVersion: v1
+        kind: PersistentVolume
+        metadata:
+          name: data-es-cluster-0
+        spec:
+          capacity:
+            storage: 10Gi
+          accessModes: 
+            - ReadWriteOnce
+          storageClassName: "yc-network-hdd"
+          claimRef:
+            name: data-es-cluster-0
+            namespace: logging
+          csi:
+            driver: disk-csi-driver.mks.ycloud.io
+            fsType: ext4
+            volumeHandle: "{{ data_es_cluster_0 }}"
+
+
+  - name: Create a PersistentVolume data-es-cluster-1
+    community.kubernetes.k8s:
+      state: present
+      definition:
+        apiVersion: v1
+        kind: PersistentVolume
+        metadata:
+          name: data-es-cluster-1
+        spec:
+          capacity:
+            storage: 10Gi
+          accessModes: 
+            - ReadWriteOnce
+          storageClassName: "yc-network-hdd"
+          claimRef:
+            name: data-es-cluster-1
+            namespace: logging
+          csi:
+            driver: disk-csi-driver.mks.ycloud.io
+            fsType: ext4
+            volumeHandle: "{{ data_es_cluster_1 }}"
+
+  - name: Create a PersistentVolume data-es-cluster-2
+    community.kubernetes.k8s:
+      state: present
+      definition:
+        apiVersion: v1
+        kind: PersistentVolume
+        metadata:
+          name: data-es-cluster-2
+        spec:
+          capacity:
+            storage: 10Gi
+          accessModes: 
+            - ReadWriteOnce
+          storageClassName: "yc-network-hdd"
+          claimRef:
+            name: data-es-cluster-2
+            namespace: logging
+          csi:
+            driver: disk-csi-driver.mks.ycloud.io
+            fsType: ext4
+            volumeHandle: "{{ data_es_cluster_2 }}"

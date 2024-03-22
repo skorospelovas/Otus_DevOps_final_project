@@ -1,0 +1,17 @@
+---
+service:
+  internalPort: 8000
+  externalPort: 8000
+
+image:
+  repository: skorospelovas/crawler
+  tag:
+
+#databaseHost:
+#databasePort:
+#RabbitmqHost:
+#RabbitmqQueue:
+#RabbitmqUsername:
+#RabbitmqPassword:
+#CheckInterval:
+#ExcludeURLS:

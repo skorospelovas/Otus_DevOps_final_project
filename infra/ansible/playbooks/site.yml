@@ -1,0 +1,4 @@
+---
+- import_playbook: gitlab.yml
+- import_playbook: k8s-namespace.yaml
+- import_playbook: k8s-pv.yaml

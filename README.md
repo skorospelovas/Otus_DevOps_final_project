@@ -54,33 +54,33 @@
 
 Для доступа к созываемым ресурсам сгенерировать пару ключей
 
-> 
+## 
     ssh-keygen -t rsa -f ~/.ssh/id_rsa -C ubuntu -P ""
 
 Создать профиль для  Yandex  CLI https://cloud.yandex.ru/docs/cli/operations/profile/profile-create
 Создать сервисный аккаунт в Yandex.Cloud
 
-> 
+##
     $ yc config list - Получить Folder-id
     $ SVC_ACCT="прописать свое имя"
     $ FOLDER_ID="вписать полученный Folder-id" 
  
 Создать аккаунт и назначить права:
 
->
+##
     $ yc iam service-account create --name $SVC_ACCT --folder-id $FOLDER_ID
     $ ACCT_ID=$(yc iam service-account get $SVC_ACCT | \
     grep ^id | \
     awk '{print $2}') 
- 
-> 
+
+ ##
     $ yc resource-manager folder add-access-binding --id $FOLDER_ID \
     --role editor \ 
     --service-account-id $ACCT_
 
 Создать IAM key и экспортировать его в файл
 
-> 
+##
     yc iam key create --service-account-id $ACCT_ID --output «путь к файлу»/key.json
     git clone https://github.com/skorospelovas/Otus_DevOps_final_project.git
     cd Otus_DevOps_final_project/infra
@@ -89,24 +89,24 @@
 Переименовать файл infra/packer/variables.json.example в variables.json и вставить свои значения
 
 Выполнить сборку:
-> 
+##
     packer build -var-file packer/variables.json packer/mongodb.json
 
 Получить id созданного образа:
-> 
+##
     yc compute image list
 
 Переименовать файл infra/terraform/ terraform.tfvars.example в variables.json и вставить свои значения
 Перейти и выполнить
->
-  cd terraform
-  terraform init
-  terraform apply
+##
+    cd terraform
+    terraform init
+    terraform apply
 
 Так как мы обходимся без резервирования статических ip адресов, после запуска выполнения необхоидмо в Yandex Cloud, посмотреть ip адрес созданной A записи gitlab.project.space и
 на локальной машине в файл /etc/hosts добавить запись вида:
 ##
-  <ip адрес> gitlab.project.space
+    <ip адрес> gitlab.project.space
 
 Terraform произведет установку:
 * VM для  MongoDB на базе созданного образа без публичного IP
@@ -131,18 +131,18 @@ Ansible создаст:
 * Получить токены регистрации gitlab-runner 
 
 Добавить репозитарий Helm:
->
+##
     helm repo add bitnami https://charts.bitnami.com/bitnami
 
 Выполнить с добавлением токенов:
->
+##
     helm install --namespace gitlab gitlab-runner-ui \
     --set gitlabUrl=https://gitlab.project.space/ \
     --set runnerRegistrationToken="..." \
     --set runners.privileged=true \
      gitlab/gitlab-runner
 
->
+##
     helm install --namespace gitlab gitlab-runner-crawler \
     --set gitlabUrl=https://gitlab.project.space/ \
     --set runnerRegistrationToken="..." \
@@ -150,7 +150,7 @@ Ansible создаст:
      gitlab/gitlab-runner
 
 Добавить права раннеру
->
+##
     kubectl create clusterrolebinding gitlab-cluster-admin \
     --clusterrole=cluster-admin \
     --serviceaccount=gitlab:default
@@ -158,19 +158,19 @@ Ansible создаст:
 ### Установка микросервисов
 
 Выполнить установку ingress-ngnix
->
+##
     kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.34.1/deploy/static/provider/cloud/deploy.yaml
 
 Посмотреть IP LoadBalancer:
->
+##
     kubectl get svc -n ingress-nginx
 
 Через веб интерфейс YC создать А DNS записи поддоменов app, staging, prometheus,  grafana, zipkin , kibana  домен project.space на внешний IP LoadBalancer.
 
 Установить RabbitMQ
->
+##
     export RABBITMQ_PASSWORD=crawler_pass
->
+##
     helm install rabbitmq \
     --set auth.password=$RABBITMQ_PASSWORD \
     bitnami/rabbitmq \
@@ -180,7 +180,7 @@ Ansible создаст:
 OTUS_DevOps_final_project/microservices
 
 Выполнить:
->
+##
     kubectl apply -f app -n production
     kubectl apply -f tracing -n production
     kubectl apply -f logging -n logging
@@ -200,7 +200,7 @@ http://kibana.project.space
 
 ### CI/CD
 В папках src/ui и src/crawler выполнить 
->
+##
     git init
     git remote add origin https://gitlab.project.space/root/ui
     git remote add origin https://gitlab.project.space/root/crawler

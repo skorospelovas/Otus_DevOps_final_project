@@ -77,8 +77,8 @@ resource "yandex_compute_instance" "srv-gitlab" {
   }
 
 
-  #provisioner "local-exec" {
-  #  command     = "ansible-playbook playbooks/site.yml"
-  #  working_dir = "../ansible"
-  #}
+  provisioner "local-exec" {
+    command     = "ansible-playbook playbooks/site.yml"
+    working_dir = "../ansible"
+  }
 }
